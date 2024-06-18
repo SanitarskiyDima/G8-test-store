@@ -48,3 +48,12 @@ describe('Negative authorization test suite', () => {
     cy.get('#loginFrm_loginname').type(user.loginname);
   })
 })
+
+
+// it('User cannot login with empty password', () => {
+//     homePage.visit();
+//     homePage.openLoginPage();
+//     loginPage.fillLoginForm(user.loginname, '');
+//     loginPage.submitLoginForm();
+//     loginPage.verifyErrorMessage('Error: Incorrect login or password provided.');
+// })
