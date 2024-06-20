@@ -1,59 +1,53 @@
 import user from '../fixtures/user.json';
-import { faker } from '@faker-js/faker';
+import {faker} from '@faker-js/faker';
+import homePage from '../support/pages/HomePage';
+import loginPage from "../support/pages/LoginPage";
+import accountPage from "../support/pages/AccountPage";
+import loginPageAlternative from "../support/pages/LoginPageAlternative";
 
-beforeEach(()=>{
-  cy.log("Open home page");
-  cy.visit('/');
-
-  cy.log("Open account/login page");
-  cy.get('#customer_menu_top').click();
+beforeEach(() => {
+    homePage.visit();
+    homePage.clickLoginOrRegisterButton();
 })
 
 it('Successful authorization', () => {
-  cy.log("Fill login form");
-  cy.get('#loginFrm_loginname').type(user.loginname);
-  cy.get('#loginFrm_password').type(user.password);
-  cy.get('[title="Login"]').click();
+    loginPage.fillLoginForm(user.loginname, user.password);
+    loginPage.clickLoginButton();
+    accountPage.getFirstNameText().should('have.text', user.firstname);
 })
 
 describe('Negative authorization test suite', () => {
 
-  afterEach(()=>{
-    cy.get('[title="Login"]').click();
-    cy.log('Verify error message');
-    cy.get('.alert.alert-error.alert-danger').should('have.text', `\n×\nError: Incorrect login or password provided.`)
-  })
+    afterEach(() => {
+        loginPage.clickLoginButton();
 
-  it('User cannot login with incorrect loginname', () => {
-    user.loginname = faker.internet.userName();
-    cy.log("Fill login form");
-    cy.get('#loginFrm_loginname').type(user.loginname);
-    cy.get('#loginFrm_password').type(user.password);
-  })
+        cy.log('Verify error message');
+        loginPage.getErrorMessageText().should('have.text', `\n×\nError: Incorrect login or password provided.`)
+    })
 
-  it('User cannot login with empty loginname', () => {
-    cy.log("Fill login form");
-    cy.get('#loginFrm_password').type(user.password);
-  })
+    it('User cannot login with incorrect loginname', ({page, req}) => {
+        user.loginname = faker.internet.userName();
+        loginPage.fillLoginForm(user.loginname, user.password);
+    })
 
-  it('User cannot login with incorrect password', () => {
-    user.password = faker.internet.userName();
-    cy.log("Fill login form");
-    cy.get('#loginFrm_loginname').type(user.loginname);
-    cy.get('#loginFrm_password').type(user.password);
-  })
+    it('User cannot login with empty loginname', () => {
+        loginPage.fillLoginForm('', user.password);
+    })
 
-  it('User cannot login with empty password', () => {
-    cy.log("Fill login form");
-    cy.get('#loginFrm_loginname').type(user.loginname);
-  })
+    it('User cannot login with incorrect password', () => {
+        user.password = faker.internet.userName();
+        loginPage.fillLoginForm(user.loginname, user.password);
+    })
+
+    it('User cannot login with empty password', () => {
+        loginPage.fillLoginForm(user.loginname, '');
+    })
 })
 
 
-// it('User cannot login with empty password', () => {
-//     homePage.visit();
-//     homePage.openLoginPage();
-//     loginPage.fillLoginForm(user.loginname, '');
-//     loginPage.submitLoginForm();
-//     loginPage.verifyErrorMessage('Error: Incorrect login or password provided.');
-// })
+it('User cannot login with empty password', () => {
+    loginPageAlternative.getLoginNameInputField().type(user.loginname);
+    loginPageAlternative.getPasswordInputField().type('');
+    loginPageAlternative.getLoginButton().click();
+    loginPageAlternative.getErrorMessageText().should('have.text', `\n×\nError: Incorrect login or password provided.`)
+})
