@@ -47,7 +47,7 @@ describe('Negative authorization test suite', () => {
 
 it('User cannot login with empty password', () => {
     loginPageAlternative.getLoginNameInputField().type(user.loginname);
-    loginPageAlternative.getPasswordInputField().type('');
+    // loginPageAlternative.getPasswordInputField().type(' ');
     loginPageAlternative.getLoginButton().click();
     loginPageAlternative.getErrorMessageText().should('have.text', `\n×\nError: Incorrect login or password provided.`)
 })

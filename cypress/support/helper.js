@@ -70,3 +70,30 @@ export function findNewProduct(productName) {
 //     console.log('Hello from myRecursionFunc')
 //     myRecursionFunc();
 // }
+
+export function headlessAuthorization(loginName, password) {
+    cy.request({
+        method: 'GET',
+        url: '/index.php?rt=account/login'
+    }).then((htmlResponse) => {
+        const htmlObject = window.document.createElement('html');
+        htmlObject.innerHTML = htmlResponse.body;
+        const csrfToken = htmlObject.querySelector('#loginFrm [name="csrftoken"]').value
+        const csrfInstance = htmlObject.querySelector('#loginFrm [name="csrfinstance"]').value
+
+        cy.request({
+            method: 'POST',
+            url: '/index.php?rt=account/login',
+            form: true,
+            body: {
+                csrftoken: csrfToken,
+                csrfinstance: csrfInstance,
+                loginname: loginName,
+                password: password
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(200);
+        })
+
+    })
+}

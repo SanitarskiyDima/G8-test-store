@@ -6,7 +6,7 @@ beforeEach(() => {
     login(user.loginname, user.password);
 })
 
-it.skip('Place order from the main page', () => {
+it('Place order from the main page', () => {
     let productPrice;
     let productQuantity;
 
@@ -34,6 +34,6 @@ it.skip('Place order from the main page', () => {
 
 it('Homework helper function test', () => {
     cy.visit('/');
-    cy.get('#filter_keyword').type('i').closest('form').submit();
+    cy.get('#filter_keyword-FAIL').type('i').closest('form').submit(); //-FAIL intentionally added to the id to make the test fail
     findNewProduct('Benefit Bella Bamba');
 })
