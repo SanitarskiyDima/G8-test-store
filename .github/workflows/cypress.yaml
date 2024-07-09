@@ -7,7 +7,6 @@ on:
       browser:
         description: 'Please select browser for test run'
         required: true
-        default: 'chrome'
         type: choice
         options:
           - chrome
@@ -24,4 +23,4 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{ inputs.browser }}
+          browser: ${{ inputs.browser || inputs.browser.default}}
