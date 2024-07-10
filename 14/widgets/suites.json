@@ -1,0 +1,1 @@
+{"total":6,"items":[{"uid":"7f0551ddae9e475698f03eba726930d6","name":"Negative authorization test suite","statistic":{"failed":0,"broken":1,"skipped":0,"passed":3,"unknown":0,"total":4}},{"uid":"3aeb5fc347c5df9484880539ae9bf2d4","name":"Registration positive test suite","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
